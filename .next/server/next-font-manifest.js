@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/bagoessprasetyo/Documents/react/unseenindonesia/src/app/layout\":[\"static/media/e4af272ccee01ff0-s.p.woff2\",\"static/media/c90a9e82ec3f8868.p.woff2\",\"static/media/dcc209c0b1ab30af-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
