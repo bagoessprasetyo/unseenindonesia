@@ -38,7 +38,7 @@ export default function HomePage() {
       // Load featured stories with coordinates extracted via SQL
       const { data: storiesData } = await supabase
         .rpc('get_stories_with_coordinates_simple')
-        .limit(20)
+        // .limit(20)
 
       setCategories(categoriesData || [])
       setStories(storiesData || [])
