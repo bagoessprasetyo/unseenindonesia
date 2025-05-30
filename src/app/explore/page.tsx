@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { MainLayout } from '@/components/layout/MainLayout'
 import { StoryCard } from '@/components/stories/StoryCard'
@@ -29,7 +29,7 @@ import {
 type ViewMode = 'grid' | 'list' | 'map'
 type SortOption = 'newest' | 'oldest' | 'most_viewed' | 'most_verified' | 'alphabetical'
 
-export default function ExplorePage() {
+function ExplorePageContent() {
   const [stories, setStories] = useState<StoryWithDetails[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [locations, setLocations] = useState<Location[]>([])
@@ -354,5 +354,19 @@ export default function ExplorePage() {
         )}
       </div>
     </MainLayout>
+  )
+}
+
+export default function ExplorePage() {
+  return (
+    <Suspense fallback={
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="w-8 h-8 animate-spin text-indonesia-red" />
+        </div>
+      </MainLayout>
+    }>
+      <ExplorePageContent />
+    </Suspense>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { MainLayout } from '@/components/layout/MainLayout'
 import { StoryCard } from '@/components/stories/StoryCard'
@@ -15,7 +15,7 @@ import { BookOpen, Loader2 } from 'lucide-react'
 type ViewMode = 'grid' | 'list'
 type SortOption = 'newest' | 'oldest' | 'most_viewed' | 'most_verified' | 'alphabetical'
 
-export default function StoriesPage() {
+function StoriesPageContent() {
   const [stories, setStories] = useState<StoryWithDetails[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
@@ -229,5 +229,19 @@ export default function StoriesPage() {
         )}
       </div>
     </MainLayout>
+  )
+}
+
+export default function StoriesPage() {
+  return (
+    <Suspense fallback={
+      <MainLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="w-8 h-8 animate-spin text-indonesia-red" />
+        </div>
+      </MainLayout>
+    }>
+      <StoriesPageContent />
+    </Suspense>
   )
 }
