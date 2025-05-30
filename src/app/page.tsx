@@ -9,7 +9,7 @@ import { CategoryFilter } from '@/components/filters/CategoryFilter'
 import { useAuth } from '@/components/providers/Providers'
 import { createSupabaseClient } from '@/lib/supabase'
 import type { StoryWithDetails, Category } from '@/types/database'
-import { Loader2, MapPin, TrendingUp, Filter, X, Search, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Loader2, MapPin, TrendingUp, Search, ChevronLeft, ChevronRight, X } from 'lucide-react'
 
 export default function HomePage() {
   const [stories, setStories] = useState<StoryWithDetails[]>([])
@@ -18,7 +18,6 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [mapCenter, setMapCenter] = useState<[number, number]>([-2.5489, 118.0149]) // Indonesia center
   const [mapZoom, setMapZoom] = useState(5)
-  const [showFilter, setShowFilter] = useState(false) // Start hidden
   const [showSidebar, setShowSidebar] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   
@@ -78,14 +77,21 @@ export default function HomePage() {
     console.log('Map clicked:', { lng, lat })
   }
 
-  // Filter stories based on search query
-  const filteredStories = stories.filter(story => 
-    story.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    story.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    story.summary?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    story.category?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    story.location?.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  // Filter stories based on search query AND selected category
+  const filteredStories = stories.filter(story => {
+    // Search filter
+    const matchesSearch = !searchQuery || 
+      story.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      story.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      story.summary?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      story.category?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      story.location?.name.toLowerCase().includes(searchQuery.toLowerCase())
+    
+    // Category filter
+    const matchesCategory = !selectedCategory || story.category_id === selectedCategory
+    
+    return matchesSearch && matchesCategory
+  })
 
   if (loading) {
     return (
@@ -105,33 +111,18 @@ export default function HomePage() {
           <EnhancedInteractiveMap
             center={mapCenter}
             zoom={mapZoom}
-            stories={stories}
+            stories={filteredStories}
             onStoryClick={handleStorySelect}
             onMapClick={handleMapClick}
           />
           
-          {/* Filter Toggle Button */}
+          {/* Category Filter Button */}
           <div className="absolute top-4 left-4 z-20">
-            <button
-              onClick={() => setShowFilter(!showFilter)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg transition-colors ${
-                showFilter 
-                  ? 'bg-indonesia-red text-white' 
-                  : 'bg-white text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              {showFilter ? (
-                <>
-                  <X className="w-4 h-4" />
-                  <span className="text-sm font-medium">Tutup Filter</span>
-                </>
-              ) : (
-                <>
-                  <Filter className="w-4 h-4" />
-                  <span className="text-sm font-medium">Filter Kategori</span>
-                </>
-              )}
-            </button>
+            <CategoryFilter
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+            />
           </div>
 
           {/* Sidebar Toggle Button */}
@@ -154,30 +145,25 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* Filter Panel */}
-          {showFilter && (
-            <div className="absolute top-16 left-4 bg-white rounded-lg shadow-lg p-4 z-10 max-w-sm">
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-indonesia-red" />
-                Pilih Kategori
-              </h3>
-              <CategoryFilter
-                categories={categories}
-                selectedCategory={selectedCategory}
-                onCategoryChange={setSelectedCategory}
-              />
-            </div>
-          )}
-
           {/* Story Count Badge */}
           <div className="absolute bottom-4 left-4 bg-white rounded-lg shadow-lg px-4 py-2 z-10">
             <div className="flex items-center gap-2 text-sm">
               <TrendingUp className="w-4 h-4 text-indonesia-red" />
-              <span className="font-medium">{filteredStories.length} cerita ditemukan</span>
+              <span className="font-medium">
+                {filteredStories.length} 
+                {filteredStories.length !== stories.length && (
+                  <span className="text-gray-500"> dari {stories.length}</span>
+                )} 
+                cerita
+                {selectedCategory && (
+                  <span className="text-indonesia-red ml-1">
+                    (filtered)
+                  </span>
+                )}
+              </span>
             </div>
-            {/* Debug info */}
             <div className="text-xs text-gray-500 mt-1">
-              {stories.filter(s => (s as any).latitude && (s as any).longitude).length} dengan koordinat
+              {filteredStories.filter(s => (s as any).latitude && (s as any).longitude).length} dengan koordinat
             </div>
           </div>
         </div>
@@ -191,6 +177,11 @@ export default function HomePage() {
               </h2>
               <p className="text-sm text-gray-600 mb-4">
                 Temukan sejarah tersembunyi dari seluruh nusantara
+                {selectedCategory && (
+                  <span className="block text-indonesia-red font-medium mt-1">
+                    Filter: {categories.find(cat => cat.id === selectedCategory)?.name}
+                  </span>
+                )}
               </p>
               
               {/* Search Field */}
@@ -231,8 +222,22 @@ export default function HomePage() {
                   <div className="text-center py-12">
                     <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                     <p className="text-gray-500">
-                      {searchQuery ? 'Tidak ada cerita yang cocok' : 'Belum ada cerita untuk kategori ini'}
+                      {searchQuery || selectedCategory 
+                        ? 'Tidak ada cerita yang cocok dengan filter' 
+                        : 'Belum ada cerita tersedia'
+                      }
                     </p>
+                    {(searchQuery || selectedCategory) && (
+                      <button
+                        onClick={() => {
+                          setSearchQuery('')
+                          setSelectedCategory(null)
+                        }}
+                        className="mt-2 text-sm text-indonesia-red hover:text-indonesia-deep-red"
+                      >
+                        Hapus semua filter
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
