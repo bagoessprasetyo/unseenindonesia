@@ -33,7 +33,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   const navigation = [
     { name: 'Peta', href: '/', icon: Map, current: pathname === '/' },
     { name: 'Jelajahi', href: '/explore', icon: Compass, current: pathname === '/explore' },
-    { name: 'Cerita', href: '/stories', icon: BookOpen, current: pathname === '/stories' },
+    // { name: 'Cerita', href: '/stories', icon: BookOpen, current: pathname === '/stories' },
   ]
 
   const handleSignOut = async () => {
