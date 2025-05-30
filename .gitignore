@@ -1,3 +1,5 @@
 node_modules/
 **/*.node
 @swc/
+.next/
+node_modules/
