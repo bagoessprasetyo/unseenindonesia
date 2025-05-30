@@ -29,7 +29,7 @@ export default function HomePage() {
 
   const loadInitialData = async () => {
     try {
-      // Load categories
+      
       const { data: categoriesData } = await supabase
         .from('categories')
         .select('*')
