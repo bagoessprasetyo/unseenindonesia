@@ -137,49 +137,49 @@ export function EnhancedInteractiveMap({
     //   data: geojsonData
     // })
 
-    map.current.addLayer({
-      id: 'stories-heatmap-layer',
-      type: 'heatmap',
-      source: 'stories-heatmap',
-      maxzoom: 15,
-      paint: {
-        'heatmap-weight': [
-          'interpolate',
-          ['linear'],
-          ['get', 'verification_count'],
-          0, 0,
-          10, 1
-        ],
-        'heatmap-intensity': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          0, 1,
-          15, 3
-        ],
-        'heatmap-color': [
-          'interpolate',
-          ['linear'],
-          ['heatmap-density'],
-          0, 'rgba(255, 255, 255, 0)',
-          0.2, 'rgb(255, 215, 0)',
-          0.4, 'rgb(255, 165, 0)', 
-          0.6, 'rgb(255, 69, 0)',
-          0.8, 'rgb(255, 0, 0)',
-          1, 'rgb(139, 0, 0)'
-        ],
-        'heatmap-radius': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          0, 2,
-          15, 20
-        ]
-      },
-      layout: {
-        visibility: 'none'
-      }
-    })
+    // map.current.addLayer({
+    //   id: 'stories-heatmap-layer',
+    //   type: 'heatmap',
+    //   source: 'stories-heatmap',
+    //   maxzoom: 15,
+    //   paint: {
+    //     'heatmap-weight': [
+    //       'interpolate',
+    //       ['linear'],
+    //       ['get', 'verification_count'],
+    //       0, 0,
+    //       10, 1
+    //     ],
+    //     'heatmap-intensity': [
+    //       'interpolate',
+    //       ['linear'],
+    //       ['zoom'],
+    //       0, 1,
+    //       15, 3
+    //     ],
+    //     'heatmap-color': [
+    //       'interpolate',
+    //       ['linear'],
+    //       ['heatmap-density'],
+    //       0, 'rgba(255, 255, 255, 0)',
+    //       0.2, 'rgb(255, 215, 0)',
+    //       0.4, 'rgb(255, 165, 0)', 
+    //       0.6, 'rgb(255, 69, 0)',
+    //       0.8, 'rgb(255, 0, 0)',
+    //       1, 'rgb(139, 0, 0)'
+    //     ],
+    //     'heatmap-radius': [
+    //       'interpolate',
+    //       ['linear'],
+    //       ['zoom'],
+    //       0, 2,
+    //       15, 20
+    //     ]
+    //   },
+    //   layout: {
+    //     visibility: 'none'
+    //   }
+    // })
   }
 
   // Update map style
@@ -204,7 +204,7 @@ export function EnhancedInteractiveMap({
     if (!map.current || !mapLoaded) return
 
     const visibility = showHeatmap ? 'visible' : 'none'
-    map.current.setLayoutProperty('stories-heatmap-layer', 'visibility', visibility)
+    // map.current.setLayoutProperty('stories-heatmap-layer', 'visibility', visibility)
   }, [showHeatmap, mapLoaded])
 
   // Update story markers
