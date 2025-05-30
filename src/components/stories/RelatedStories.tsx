@@ -82,13 +82,13 @@ export function RelatedStories({ currentStoryId, categoryId, locationId }: Relat
   const tabs = [
     {
       key: 'category' as const,
-      label: 'Kategori Serupa',
+      label: 'Kategori',
       icon: Compass,
       disabled: !categoryId
     },
     {
       key: 'location' as const,
-      label: 'Lokasi Sama',
+      label: 'Lokasi',
       icon: MapPin,
       disabled: !locationId
     },
