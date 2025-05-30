@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Nunito_Sans, Playfair_Display } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 // import { Providers } from '@/components/providers/Providers'
 import './globals.css'
 import { Providers } from '@/components/providers/Providers'
@@ -10,11 +10,10 @@ const inter = Inter({
   display: 'swap',
 })
 
-const nunitoSans = Nunito_Sans({ 
-  subsets: ['latin'],
-  variable: '--font-nunito-sans',
-  display: 'swap',
-})
+// const nunitoSans = Nunito_Sans({ 
+//   subsets: ['latin'],
+//   variable: '--font-nunito-sans'
+// })
 
 const playfairDisplay = Playfair_Display({ 
   subsets: ['latin'],
@@ -72,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="id" suppressHydrationWarning>
       <body 
-        className={`${inter.variable} ${nunitoSans.variable} ${playfairDisplay.variable} font-sans antialiased`}
+        className={`${inter.variable} ${playfairDisplay.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <Providers>
