@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 0 100% 50%; /* Indonesia Red */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 210 40% 98%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 98%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 45 100% 50%; /* Indonesia Gold */
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 0 100% 50%; /* Indonesia Red */
+    --radius: 0.5rem;
+    
+    /* UnseenIndonesia Custom Variables */
+    --indonesia-red: 0 100% 50%;
+    --indonesia-deep-red: 351 65% 44%;
+    --indonesia-gold: 51 100% 50%;
+    --indonesia-ocean-blue: 198 100% 29%;
+    --indonesia-forest-green: 120 65% 31%;
+    --indonesia-earth-brown: 25 47% 31%;
+    
+    /* Verification Colors */
+    --verification-trust-green: 158 64% 52%;
+    --verification-warning-orange: 38 92% 50%;
+    --verification-error-red: 0 84% 60%;
+    --verification-info-blue: 221 83% 53%;
+    
+    /* Neutral Colors */
+    --charcoal: 0 0% 18%;
+    --warm-gray: 0 0% 42%;
+    --light-gray: 0 0% 96%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 0 100% 60%; /* Lighter red for dark mode */
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 45 100% 60%; /* Lighter gold for dark mode */
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 0 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-secondary;
+  }
+  
+  .font-accent {
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* Mapbox CSS */
+  .mapboxgl-popup {
+    max-width: 320px !important;
+  }
+  
+  .mapboxgl-popup-content {
+    @apply rounded-xl shadow-lg border-0;
+    padding: 0 !important;
+  }
+  
+  .mapboxgl-popup-close-button {
+    @apply text-gray-500 hover:text-gray-700 text-lg;
+    right: 8px !important;
+    top: 8px !important;
+  }
+  
+  .mapboxgl-popup-tip {
+    @apply border-t-white;
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded-full;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full hover:bg-gray-400;
+  }
+
+  /* Story card animations */
+  .story-card {
+    @apply transition-all duration-200 ease-out;
+  }
+  
+  .story-card:hover {
+    @apply transform -translate-y-1 shadow-lg;
+  }
+
+  /* Verification badge styles */
+  .verification-badge {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .verification-badge.new {
+    @apply bg-red-100 text-red-700;
+  }
+  
+  .verification-badge.interest {
+    @apply bg-yellow-100 text-yellow-700;
+  }
+  
+  .verification-badge.verified {
+    @apply bg-green-100 text-green-700;
+  }
+  
+  .verification-badge.source-backed {
+    @apply bg-blue-100 text-blue-700;
+  }
+  
+  .verification-badge.highly-trusted {
+    @apply bg-purple-100 text-purple-700;
+  }
+
+  /* Loading animations */
+  .skeleton {
+    @apply animate-pulse bg-gray-200 rounded;
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Rich text editor styles */
+  .ql-editor {
+    @apply text-base leading-relaxed;
+    min-height: 200px;
+  }
+  
+  .ql-editor p {
+    @apply mb-4;
+  }
+  
+  .ql-editor h1, .ql-editor h2, .ql-editor h3 {
+    @apply font-secondary font-semibold mt-6 mb-3;
+  }
+
+  /* Map container */
+  .map-container {
+    @apply relative w-full h-full;
+  }
+  
+  .map-container .mapboxgl-canvas {
+    @apply rounded-lg;
+  }
+
+  /* Indonesia-themed gradients */
+  .indonesia-gradient {
+    background: linear-gradient(135deg, #006994 0%, #228B22 100%);
+  }
+  
+  .heritage-gradient {
+    background: linear-gradient(135deg, #FF0000 0%, #FFD700 100%);
+  }
+}
