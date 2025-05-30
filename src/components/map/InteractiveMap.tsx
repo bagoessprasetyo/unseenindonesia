@@ -408,7 +408,7 @@ export function EnhancedInteractiveMap({
       <MapControls
         mapStyle={mapStyle}
         onMapStyleChange={setMapStyle}
-        showHeatmap={showHeatmap}
+        showHeatmap={false}
         onToggleHeatmap={setShowHeatmap}
         onFitToStories={fitToStories}
         storyCount={filteredStories.length}

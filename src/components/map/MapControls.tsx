@@ -60,7 +60,7 @@ export function MapControls({
   const currentStyle = mapStyles.find(style => style.id === mapStyle)
 
   return (
-    <div className="absolute top-4 right-4 space-y-2 z-10">
+    <div className="absolute top-16 right-12 space-y-2 z-10">
       {/* Style Selector */}
       <div className="relative">
         <button
@@ -102,7 +102,7 @@ export function MapControls({
       </div>
 
       {/* Heatmap Toggle */}
-      <button
+      {/* <button
         onClick={() => onToggleHeatmap(!showHeatmap)}
         className={`bg-white rounded-lg shadow-lg border border-gray-200 p-3 hover:bg-gray-50 flex items-center gap-2 ${
           showHeatmap ? 'bg-indonesia-red text-white' : ''
@@ -111,7 +111,7 @@ export function MapControls({
       >
         <Activity className="w-4 h-4" />
         <span className="text-sm font-medium">Heatmap</span>
-      </button>
+      </button> */}
 
       {/* Fit to Stories */}
       <button

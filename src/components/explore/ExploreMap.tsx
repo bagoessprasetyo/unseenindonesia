@@ -12,6 +12,9 @@ const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
 
 if (typeof window !== 'undefined' && MAPBOX_TOKEN) {
   mapboxgl.accessToken = MAPBOX_TOKEN
+  mapboxgl.prewarm()
+  // Disable telemetry to prevent ad blocker errors
+  ;(mapboxgl as any).clearPrewarmedResources()
 }
 
 interface ExploreMapProps {
@@ -40,15 +43,43 @@ export function ExploreMap({ stories, onStoryClick }: ExploreMapProps) {
       return
     }
 
+    // Block all Mapbox telemetry methods
+    if (typeof window !== 'undefined') {
+      const noop = () => Promise.resolve()
+      
+      // Override multiple request methods
+      const originalFetch = window.fetch
+      const originalXHR = window.XMLHttpRequest
+      
+      window.fetch = function(url, ...args) {
+        if (typeof url === 'string' && url.includes('mapbox.com/events')) {
+          return Promise.resolve(new Response('', { status: 204 }))
+        }
+        return originalFetch(url, ...args)
+      }
+      
+      // Block navigator.sendBeacon
+      if (navigator.sendBeacon) {
+        const originalBeacon = navigator.sendBeacon
+        navigator.sendBeacon = function(url, data) {
+          if (typeof url === 'string' && url.includes('mapbox.com')) {
+            return true
+          }
+          return originalBeacon.call(this, url, data)
+        }
+      }
+    }
+
     // Initialize map
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/outdoors-v12',
-      center: [INDONESIA_CENTER[1], INDONESIA_CENTER[0]], // [lng, lat]
+      center: [INDONESIA_CENTER[1], INDONESIA_CENTER[0]],
       zoom: 5,
+      collectResourceTiming: false,
       maxBounds: [
-        [INDONESIA_BOUNDS.west, INDONESIA_BOUNDS.south], // SW
-        [INDONESIA_BOUNDS.east, INDONESIA_BOUNDS.north]  // NE
+        [INDONESIA_BOUNDS.west, INDONESIA_BOUNDS.south],
+        [INDONESIA_BOUNDS.east, INDONESIA_BOUNDS.north]
       ]
     })
 
