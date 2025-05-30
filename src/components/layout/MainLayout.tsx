@@ -16,7 +16,8 @@ import {
   Compass,
   BookOpen,
   Bell,
-  Loader2
+  Loader2,
+  Leaf  // Added for Ancient Remedies icon
 } from 'lucide-react'
 import { useAuth } from '@/components/providers/Providers'
 import { SearchComponent } from '@/components/search/SearchComponent'
@@ -35,6 +36,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   const navigation = [
     { name: 'Peta', href: '/', icon: Map, current: pathname === '/' },
     { name: 'Jelajahi', href: '/explore', icon: Compass, current: pathname === '/explore' },
+    { name: 'Ramuan Nusantara', href: '/remedies', icon: Leaf, current: pathname.startsWith('/remedies') }, // New section
     // { name: 'Cerita', href: '/stories', icon: BookOpen, current: pathname === '/stories' },
   ]
 
@@ -43,11 +45,33 @@ export function MainLayout({ children }: MainLayoutProps) {
     setUserMenuOpen(false)
   }
 
+  // Helper function to get navigation item styles
+  const getNavigationItemStyles = (item: any) => {
+    if (item.current) {
+      // Use green colors for Ramuan Nusantara, red for others
+      return item.href === '/remedies' 
+        ? 'text-green-600 bg-green-50'
+        : 'text-indonesia-red bg-red-50'
+    }
+    return 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'
+  }
+
+  // Helper function for mobile navigation styles
+  const getMobileNavigationItemStyles = (item: any) => {
+    if (item.current) {
+      // Use green colors for Ramuan Nusantara, red for others
+      return item.href === '/remedies'
+        ? 'text-green-600 bg-green-50'
+        : 'text-indonesia-red bg-red-50'
+    }
+    return 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between items-center">
             {/* Logo */}
             <div className="flex items-center">
@@ -67,11 +91,7 @@ export function MainLayout({ children }: MainLayoutProps) {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    item.current
-                      ? 'text-indonesia-red bg-red-50'
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${getNavigationItemStyles(item)}`}
                 >
                   <item.icon className="w-4 h-4" />
                   {item.name}
@@ -209,11 +229,7 @@ export function MainLayout({ children }: MainLayoutProps) {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-md text-base font-medium ${
-                    item.current
-                      ? 'text-indonesia-red bg-red-50'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md text-base font-medium ${getMobileNavigationItemStyles(item)}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <item.icon className="w-5 h-5" />
@@ -230,15 +246,41 @@ export function MainLayout({ children }: MainLayoutProps) {
         {children}
       </main>
 
-      {/* Floating Action Button - Add Story */}
+      {/* Floating Action Button - Add Story or Remedy */}
       {user && (
-        <button
-          onClick={() => router.push('/stories/new')}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-indonesia-red text-white rounded-full shadow-lg hover:bg-indonesia-deep-red transition-all duration-200 transform hover:scale-105 flex items-center justify-center z-40"
-          title="Tambah Cerita Baru"
-        >
-          <Plus className="w-6 h-6" />
-        </button>
+        <div className="fixed bottom-6 right-6 z-40">
+          {/* Main FAB */}
+          <div className="relative group">
+            <button className="w-14 h-14 bg-indonesia-red text-white rounded-full shadow-lg hover:bg-indonesia-deep-red transition-all duration-200 transform hover:scale-105 flex items-center justify-center">
+              <Plus className="w-6 h-6" />
+            </button>
+            
+            {/* Mini FABs */}
+            <div className="absolute bottom-16 right-0 opacity-0 group-hover:opacity-100 transition-all duration-200 space-y-2">
+              <button
+                onClick={() => router.push('/stories/new')}
+                className="w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center group/story"
+                title="Tambah Cerita Baru"
+              >
+                <MapPin className="w-5 h-5" />
+                <span className="absolute right-14 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover/story:opacity-100 transition-opacity whitespace-nowrap">
+                  Cerita Baru
+                </span>
+              </button>
+              
+              <button
+                onClick={() => router.push('/remedies/new')}
+                className="w-12 h-12 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-colors flex items-center justify-center group/remedy"
+                title="Tambah Ramuan Baru"
+              >
+                <Leaf className="w-5 h-5" />
+                <span className="absolute right-14 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover/remedy:opacity-100 transition-opacity whitespace-nowrap">
+                  Ramuan Baru
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Overlay for mobile menu */}
