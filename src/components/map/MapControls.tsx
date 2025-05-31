@@ -60,7 +60,7 @@ export function MapControls({
   const currentStyle = mapStyles.find(style => style.id === mapStyle)
 
   return (
-    <div className="absolute top-16 right-12 space-y-2 z-10">
+    <div className="absolute top-2 right-12 space-y-2 z-10">
       {/* Style Selector */}
       <div className="relative">
         <button
